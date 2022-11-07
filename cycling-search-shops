@@ -1,0 +1,36 @@
+#! /bin/zsh
+
+BROWSER=Firefox
+SEARCH_TERM="$@"
+SHOP_URLS=(
+    "https://www.bike24.de/suchergebnis?searchTerm={KEYWORD}"
+    "https://www.bike-components.de/de/s/?keywords={KEYWORD}"
+    "https://www.rosebikes.de/search?q={KEYWORD}"
+    "https://www.probikeshop.com/de/de/search/{KEYWORD}.html"
+    "https://www.wigglesport.de/?s={KEYWORD}"
+    "https://www.bike-discount.de/de/search?sSearch={KEYWORD}"
+    "https://www.bike-mailorder.de/#/dfclassic/query={KEYWORD}"
+    "https://www.tradeinn.com/bikeinn/?products_search%5Bquery%5D={KEYWORD}"
+    "https://www.lordgun.de/suche?s={KEYWORD}"
+    "https://www.bruegelmann.de/suche/?q={KEYWORD}"
+    "https://www.mantel.com/de/search/?q={KEYWORD}"
+)
+
+echo "+++"
+echo "+++ searching for: "$SEARCH_TERM
+echo "+++"
+
+# while read URLS
+for URLS in "${SHOP_URLS[@]}"
+do 
+    SEARCH_URL=$(echo $URLS | sed -e '
+    		s/{KEYWORD}/'"$SEARCH_TERM"'/
+    		s/\ /+/g
+    ')
+	echo "+++ opening: "$SEARCH_URL
+
+    osascript -e "tell application \"$BROWSER\" to open location \"$SEARCH_URL\""
+# done<cycling-search-shops.urls
+done
+
+echo "+++"
